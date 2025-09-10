@@ -20,28 +20,38 @@ export class InputAddress implements OnInit {
   showHistory = false;
 
   virtual = 0;
-  pid = []
+  pid!: number;
+
   newProcessName = ''
 
   constructor(private memory: MemoryService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadProcesses();
+  }
 
   createProcess() {}
+
+  loadProcesses() {
+    this.processes = this.memory.getProcesses();
+  }
 
   toggleHistory() {
     this.showHistory = !this.showHistory;
   }
 
   translate() {
-    if (this.form.invalid) return;
-    const v = Number(this.form.value.virtual);
-    const pid = Number(this.form.value.pid);
-    const res = this.memory.translateForProcess(pid, v);
-    console.log(res);
+    const pidNumber = Number(this.pid);
 
+    const res = this.memory.translateForProcess(pidNumber, this.virtual);
     this.history.unshift(res);
-    if (this.history.length > 50) this.history.pop();
+    if (this.history.length > 10) this.history.pop();
+  }
+
+  selectProcess() {
+    const pidNumber = Number(this.pid);
+    this.memory.setProcessActive(pidNumber);
+    this.activePid = this.pid;
   }
 
 }

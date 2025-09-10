@@ -1,1 +1,20 @@
-/* You can add global styles to this file, and also import other style files */
+button {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  background: linear-gradient(135deg, #b892ff, #9b7ede);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(128, 90, 213, 0.2);
+}
+
+button.btn {
+  margin-top: 1rem;
+  width: 100%;
+}

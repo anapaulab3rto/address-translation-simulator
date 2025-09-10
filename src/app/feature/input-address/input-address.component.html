@@ -9,8 +9,7 @@
     <div>
       Processo:
       <label>
-        
-        <select [(ngModel)]="pid">
+        <select [(ngModel)]="pid" (ngModelChange)="selectProcess()">
           @for (p of processes; track $index) {
           <option [value]="p.pid">PID {{p.pid}} — {{p.name}}</option>
           }
@@ -21,11 +20,8 @@
         Endereço virtual:
         <input type="number" [(ngModel)]="virtual" placeholder="Ex: 1024" />
       </label>
-
       <button type="button" (click)="translate()">Traduzir</button>
     </div>
-
- 
 
   <button (click)="toggleHistory()" class="btn">
     {{ showHistory ? 'Esconder histórico' : 'Ver histórico de traduções' }}

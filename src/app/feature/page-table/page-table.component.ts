@@ -16,4 +16,12 @@ export class PageTable {
 
   constructor(private memory: MemoryService) {}
 
+  ngOnInit() {
+    this.memory.activeProcess$.subscribe(proc => {
+      this.active = proc ?? undefined;
+      this.entries = proc
+        ? [...proc.pageTable].sort((a, b) => a.pageNumber - b.pageNumber)
+        : [];
+    });
+  }
 }
