@@ -1,5 +1,31 @@
 <div class="container">
   <section>
+    <div class="config">
+      <h3>Configuração da Memória</h3>
+      <label>Bits de endereço
+        <input type="number" [(ngModel)]="addressBits">
+      </label>
+
+      <label>Tamanho da página (bytes)
+        <input type="number" [(ngModel)]="pageSizeBytes">
+      </label>
+
+      <label>Quantidade de quadros
+        <input type="number" [(ngModel)]="framesCount">
+      </label>
+
+      <label>Política de substituição
+        <select [(ngModel)]="replacementPolicy">
+          <option value="FIFO">FIFO</option>
+          <option value="LRU">LRU</option>
+        </select>
+      </label>
+
+      <div class="actions">
+        <button type="button">Aplicar</button>
+        <button type="button">Reset</button>
+      </div>
+    </div>
     <app-input-address></app-input-address>
   </section>
   <section>
