@@ -13,7 +13,7 @@ import { MemoryService } from './service/memory.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'address-translator';
+  title = 'address-translator-simulator';
   addressBits = 8;
   pageSizeBytes = 2;
   framesCount = 10;

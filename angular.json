@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "address-translator": {
+    "address-translator-simulator": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,8 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/address-translator",
+            "outputPath": "dist/address-translation-simulator",
+            "baseHref": "/address-translation-simulator/",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -64,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "address-translator:build:production"
+              "buildTarget": "address-translator-simulator:build:production"
             },
             "development": {
-              "buildTarget": "address-translator:build:development"
+              "buildTarget": "address-translator-simulator:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -95,6 +96,9 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
