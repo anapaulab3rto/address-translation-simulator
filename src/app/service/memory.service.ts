@@ -30,7 +30,7 @@ export class MemoryService {
     return { pageNumber, offset };
   }
 
-  traslateForProcess(pid: number, virtualAddr: number) {
+  translateForProcess(pid: number, virtualAddr: number) {
     const p = this.processes.find((p) => p.pid === pid);
     if (!p) throw new Error(`Processo PID=${pid} não encontrado`);
 
