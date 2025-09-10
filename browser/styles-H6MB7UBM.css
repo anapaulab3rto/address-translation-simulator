@@ -1,0 +1,1 @@
+button{padding:.6rem 1.2rem;border-radius:8px;border:none;background:linear-gradient(135deg,#b892ff,#9b7ede);color:#fff;font-weight:600;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease}button:hover{transform:translateY(-2px);box-shadow:0 4px 8px #805ad533}button.btn{margin-top:1rem;width:100%}
