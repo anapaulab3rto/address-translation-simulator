@@ -39,6 +39,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/address-translation-simulator/",
               "budgets": [
                 {
                   "type": "initial",
