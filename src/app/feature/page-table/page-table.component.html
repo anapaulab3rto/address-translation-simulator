@@ -1,0 +1,49 @@
+<div class="pagetable-widget">
+  <h3>Tabela de Páginas (Processo Atual)</h3>
+  @if (active) {
+  <div>
+    <p class="active-process-info">
+      <strong>Ativo:</strong> PID {{active.pid}} — {{active.name}}
+    </p>
+    <table class="page-table">
+      <thead>
+        <tr>
+          <th>Página</th>
+          <th>Ativa</th>
+          <th>Quadro</th>
+          <th>Endereço</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (p of entries; track $index) {
+        <tr [class.row-invalid]="!p.valid">
+          <td data-label="Página">{{p.pageNumber}}</td>
+          <td data-label="Válida">
+            <span [class]="p.valid ? 'status status-valid' : 'status status-invalid'">
+              {{p.valid ? 'Sim' : 'Não'}}
+            </span>
+          </td>
+          <td data-label="Quadro">{{p.frameNumber !== undefined ? (p.frameNumber.toString(2)) : '-'}}</td>
+          <td data-label="Endereço">
+            @if(!p.showAddress){
+              <button type="button" (click)="p.showAddress = !p.showAddress">
+              {{ p.showAddress ? 'Ocultar' : 'Revelar' }}
+            </button>
+            }
+            {{ p.showAddress && p.frameNumber !== undefined && p.offset !== undefined
+            ? (p.frameNumber * 64 + p.offset).toString(2)
+            : '' }}
+          </td>
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  }@else {
+  <div class="empty-state">
+    <p>Nenhum processo ativo.</p>
+    <span>Crie ou selecione um processo no painel de entrada.</span>
+  </div>
+  }
+</div>
