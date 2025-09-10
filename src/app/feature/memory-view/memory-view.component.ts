@@ -12,4 +12,5 @@ export class MemoryView {
   @Input() pageFrames: PageFrame[] = [];
 
   constructor() {}
+
 }

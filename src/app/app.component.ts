@@ -1,8 +1,10 @@
+import { PageFrame } from './models/page-frame.interface';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { InputAddress } from './feature/input-address/input-address.component';
 import { MemoryView } from './feature/memory-view/memory-view.component';
 import { PageTable } from './feature/page-table/page-table.component';
+import { MemoryService } from './service/memory.service';
 
 @Component({
   selector: 'app-root',
@@ -17,5 +19,14 @@ export class AppComponent {
   framesCount = 10;
   replacementPolicy = 'FIFO'
 
+  memoryFrames: PageFrame[] = []
+
+  constructor(private memoryService: MemoryService) {
+
+  }
+
+  ngOnInit() {
+    this.memoryFrames = this.memoryService.getMemoryFrames();
+  }
 
 }
