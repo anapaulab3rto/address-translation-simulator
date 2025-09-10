@@ -9,7 +9,6 @@ section {
   display: flex;
   justify-content: center;
 }
-
 .config {
   padding: 1rem;
   width: 300px;
@@ -22,12 +21,10 @@ section {
   flex-direction: column;
   gap: 1rem;
 }
-
 .config h3 {
   color: #5e4b9a;
   margin-bottom: 0.5rem;
 }
-
 .config label {
   display: flex;
   flex-direction: column;
@@ -35,7 +32,6 @@ section {
   color: #4b3f72;
   gap: 0.3rem;
 }
-
 .config input,
 .config select {
   padding: 0.6rem;
@@ -46,20 +42,17 @@ section {
   outline: none;
   transition: border 0.2s;
 }
-
 .config input:focus,
 .config select:focus {
   border-color: #9b7ede;
   box-shadow: 0 0 0 2px rgba(155, 126, 222, 0.2);
 }
-
 .actions {
   display: flex;
   gap: 1rem;
   margin-top: 0.5rem;
   flex-wrap: wrap;
 }
-
 .actions button {
   flex: 1 1 60px;
   padding: 0.6rem 1.2rem;
@@ -71,24 +64,50 @@ section {
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-
 .actions button:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(128, 90, 213, 0.2);
 }
-
-
-
-@media (max-width: 600px) {
-  .config {
-    gap: 0.8rem;
+@media (max-width: 768px) {
+  .container {
+    margin: 0;
+    padding: 2%;
   }
-
-  .actions {
+  section {
     flex-direction: column;
   }
-
-  .actions button {
+  .grid {
+    flex-direction: column;
+    gap: 32px;
+  }
+  .grid > * {
     width: 100%;
+    flex: 1;
+  }
+  .page-table thead {
+    display: none;
+  }
+  .page-table tr {
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    padding: 8px;
+  }
+  .page-table td {
+    display: flex;
+    justify-content: space-between;
+    text-align: right;
+    padding: 8px 4px;
+    border-bottom: 1px solid #eee;
+  }
+  .page-table td:last-child {
+    border-bottom: none;
+  }
+  .page-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-align: left;
+    margin-right: 16px;
   }
 }
