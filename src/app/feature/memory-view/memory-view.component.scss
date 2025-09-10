@@ -1,0 +1,58 @@
+.memory-view {
+  padding: 1rem;
+  width: 300px;
+  background: #faf7fd;
+  border-radius: 12px;
+  font-family: "Segoe UI", sans-serif;
+  color: #4b3f72;
+
+  h3 {
+    color: #5e4b9a;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+  }
+
+  .physical-memory-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #ffffff;
+
+    thead {
+      background: #e9ddf9;
+
+      th {
+        padding: 0.75rem;
+        text-align: center;
+        font-weight: 600;
+        color: #4b3f72;
+        font-size: 0.9rem;
+        border: 1px solid #e0d4f7;
+      }
+    }
+
+    tbody {
+      tr {
+        &:nth-child(even) {
+          background: #f8f5fc;
+        }
+
+        &.occupied {
+          td {
+            background: #b892ff;
+            color: #fff;
+            font-weight: 600;
+          }
+        }
+
+        td {
+          padding: 0.6rem;
+          text-align: center;
+          border: 1px solid #e0d4f7;
+          font-size: 0.85rem;
+        }
+      }
+    }
+  }
+}

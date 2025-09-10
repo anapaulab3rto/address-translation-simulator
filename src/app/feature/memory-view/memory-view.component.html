@@ -1,0 +1,21 @@
+<div class="memory-view">
+  <h3>Memória Física (Quadros)</h3>
+  <table class="physical-memory-table">
+    <thead>
+      <tr>
+        <th>Quadro</th>
+        <th>Página</th>
+        <th>PID</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (f of pageFrames; track $index) {
+        <tr [class.occupied]="f.pid !== null">
+          <td>#{{ f.frameNumber !== undefined ? (f.frameNumber.toString(2)) : '-' }}</td>
+          <td>{{ f.pageNumber ?? '-' }}</td>
+          <td>{{ f.pid ?? '-' }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
