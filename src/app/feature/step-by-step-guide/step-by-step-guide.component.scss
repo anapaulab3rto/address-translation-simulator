@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f3e8ff; /* Lavanda muito claro */
+    color: #4a4a4a;
+    line-height: 1.5; /* Ligeiramente menor para acompanhar a fonte */
+    margin: 0;
+    padding: 15px; /* Padding menor */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-size: 0.9em; /* Tamanho da fonte base reduzido */
+}
+
+.container {
+  font-family: 'Poppins', sans-serif;
+    max-width: 700px; /* Largura máxima do container reduzida */
+    background-color: #ffffff;
+    padding: 25px; /* Padding do container reduzido */
+    border-radius: 12px; /* Borda levemente menor */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    border-left: 8px solid #d1c4e9; /* Borda lateral menor */
+}
+
+header {
+    text-align: center;
+    border-bottom: 1px solid #eee; /* Borda mais fina */
+    padding-bottom: 15px; /* Padding menor */
+    margin-bottom: 25px; /* Margem menor */
+}
+
+header h1 {
+    color: #673ab7;
+    font-weight: 600;
+    font-size: 1.8em; /* Título principal reduzido */
+}
+
+header p {
+    font-size: 0.95em; /* Fonte do parágrafo do cabeçalho reduzida */
+    color: #887a9e;
+}
+
+.step {
+    margin-bottom: 30px; /* Margem entre passos reduzida */
+    padding: 18px; /* Padding do card de passo reduzido */
+    background-color: #f9f6ff;
+    border-radius: 8px; /* Borda do card de passo reduzida */
+    border: 1px solid #e1d8f2;
+}
+
+.step h2 {
+    color: #7e57c2;
+    margin-top: 0;
+    font-size: 1.25em; /* Título do passo reduzido */
+    border-bottom: 1px solid #d1c4e9; /* Borda mais fina */
+    padding-bottom: 8px; /* Padding menor */
+    margin-bottom: 12px; /* Margem menor */
+}
+
+.address-visual, .flow-diagram {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 18px; /* Margem menor */
+    font-size: 1.1em; /* Fonte dos elementos visuais reduzida */
+    font-weight: 600;
+}
+
+.address-part, .element, .arrow {
+    padding: 8px 15px; /* Padding dos elementos visuais reduzido */
+    border-radius: 6px; /* Borda dos elementos visuais reduzida */
+    text-align: center;
+}
+
+.address-part {
+    border: 1px solid #b39ddb; /* Borda mais fina */
+}
+
+.page-number {
+    background-color: #e1bee7;
+    color: #6a1b9a;
+}
+
+.offset {
+    background-color: #c5cae9;
+    color: #3f51b5;
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.page-number {
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.frame-number {
+     background-color: #d1c4e9;
+     color: #512da8;
+     border: 1px solid #9575cd; /* Borda mais fina */
+}
+
+.flow-diagram .element {
+    background-color: #ede7f6;
+    border: 1px dashed #b39ddb; /* Borda mais fina */
+}
+
+.arrow {
+    font-size: 1.8em; /* Tamanho da seta reduzido */
+    color: #9575cd;
+    margin: 0 12px; /* Margem da seta reduzida */
+}

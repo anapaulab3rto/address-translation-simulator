@@ -5,10 +5,11 @@ import { InputAddress } from './feature/input-address/input-address.component';
 import { MemoryView } from './feature/memory-view/memory-view.component';
 import { PageTable } from './feature/page-table/page-table.component';
 import { MemoryService } from './service/memory.service';
+import { StepByStepGuideComponent } from './feature/step-by-step-guide/step-by-step-guide.component';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, InputAddress, MemoryView, PageTable],
+  imports: [FormsModule, InputAddress, MemoryView, PageTable, StepByStepGuideComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
