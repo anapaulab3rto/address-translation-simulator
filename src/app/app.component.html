@@ -7,34 +7,34 @@
       <div class="config">
         <h3>Configuração da Memória</h3>
         <label>Tamanho do espaço de endereçamento digital (Bytes)
-          <input type="number" [(ngModel)]="addressBits">
+          <input type="number" [(ngModel)]="config.addressSpace">
         </label>
 
         <label>Tamanho da página (bytes)
-          <input type="number" [(ngModel)]="pageSizeBytes">
+          <input type="number" [(ngModel)]="config.pageSizeBytes">
         </label>
 
         <label>Quantidade de quadros
-          <input type="number" [(ngModel)]="framesCount">
+          <input type="number" [(ngModel)]="config.framesCount">
         </label>
 
         <label>Política de substituição
-          <select [(ngModel)]="replacementPolicy">
+          <select [(ngModel)]="config.replacementPolicy">
             <option value="FIFO">FIFO</option>
             <option value="LRU">LRU</option>
           </select>
         </label>
 
         <div class="actions">
-          <button type="button">Aplicar</button>
+          <button type="button" (click)="setCOnfig()">Aplicar</button>
           <button type="button">Reset</button>
         </div>
       </div>
       <app-input-address></app-input-address>
     </section>
     <section>
-      <app-page-table [entries]="pageTable"></app-page-table>
-      <app-memory-view [pageFrames]="memoryFrames"></app-memory-view>
+      <app-page-table></app-page-table>
+      <app-memory-view></app-memory-view>
     </section>
   </div>
 

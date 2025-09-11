@@ -7,6 +7,7 @@ import { PageTable } from './feature/page-table/page-table.component';
 import { MemoryService } from './service/memory.service';
 import { StepByStepGuideComponent } from './feature/step-by-step-guide/step-by-step-guide.component';
 import { PageTableEntry } from './models/page-table-entry.interface';
+import { ConfigMemory } from './models/config-memory.interface';
 
 @Component({
   selector: 'app-root',
@@ -16,21 +17,25 @@ import { PageTableEntry } from './models/page-table-entry.interface';
 })
 export class AppComponent {
   title = 'address-translator-simulator';
-  addressBits = 8;
-  pageSizeBytes = 2;
-  framesCount = 10;
-  replacementPolicy = 'FIFO'
+  config: ConfigMemory = {
+    addressSpace: 64,
+    pageSizeBytes: 16,
+    framesCount: 10,
+    replacementPolicy: 'FIFO'
+  }
 
   memoryFrames: PageFrame[] = []
   pageTable: PageTableEntry[] = [];
 
-  constructor(private memoryService: MemoryService) {
-
-  }
+  constructor(private memoryService: MemoryService) {}
 
   ngOnInit() {
     this.memoryFrames = this.memoryService.getMemoryFrames();
     this.pageTable = this.memoryService.getActivePageTable() ?? [];
+  }
+
+  setCOnfig() {
+    this.memoryService.setConfig(this.config);
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { MemoryService } from '../../service/memory.service';
 import { PageTableEntry } from '../../models/page-table-entry.interface';
 
@@ -10,38 +10,18 @@ import { PageTableEntry } from '../../models/page-table-entry.interface';
 })
 export class StepByStepGuideComponent {
 
-  addr = "addr"
-  w = "w";
-  x = "x";
-  y = "y";
-  vpn = "vpn";
-  offset = "d";
-  f = "frame number";
-  pte: PageTableEntry = {
-    pid: 0,
-    valid: true,
-    pageNumber: "00",
-    frameNumber: "11",
-  };
+  addr = computed(() => this.memory.address()?.virtual ?? 'addr');
+  vpn = computed(() => this.memory.address()?.pte?.pageNumber ?? 'vpn');
+  offset = computed(() => this.memory.address()?.pte?.offset ?? 'd');
+  f = computed(() => this.memory.address()?.pte?.frameNumber ?? 'frame');
+  pte = computed<PageTableEntry | null>(() => this.memory.address()?.pte ?? null);
 
-  response = {};
+  x = computed(() => this.memory.address()?.spaceAddr ?? 0);
+  w = computed(() => this.memory.address()?.pageSizeBytes ?? 0);
+  y = computed(() =>
+    this.memory.bitsNecessarios(Number(this.memory.address()?.spaceAddr ?? 0)).toString()
+  );
 
-  constructor(private memory: MemoryService) {}
-
-  ngOnInit() {
-    this.memory.address.subscribe(res => {
-      console.log(res);
-
-      this.addr = res.virtual;
-      this.x = res.process.addressSpaceBytes;
-      this.w = res.process.pageSizeBytes;
-      this.vpn = res.pte.pageNumber;
-      this.offset = res.pte.offset;
-      this.f = res.pte.frameNumber;
-      this.pte = res.pte;
-      this.y = this.memory.bitsNecessarios(Number(this.x)).toString();
-
-    })
-  }
+  constructor(public memory: MemoryService) {}
 
 }
