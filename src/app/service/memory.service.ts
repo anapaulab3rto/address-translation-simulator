@@ -49,7 +49,38 @@ export class MemoryService {
     return { pageNumber, offset };
   }
 
+  sAddress(p: Process, addr: string) {
+    const numberOfPages = this.getNumberOfPages(p);
+    const pageNumber = this.bitsNecessarios(numberOfPages);
+
+    const resultado = {
+      page: addr.slice(0, pageNumber),
+      offset: addr.slice(pageNumber)
+    };
+    return resultado;
+  }
+
+  bitsNecessarios(n: number): number {
+    if (n === 0) return 1;
+    return Math.floor(Math.log2(n));
+  }
+
+  getNumberOfPages(p: Process) {
+    return p.addressSpaceBytes / p.pageSizeBytes;
+  }
+
+  translate(pid: number, virtualAddr: number) {
+    const p = this.processes.find(p => p.pid === pid);
+    if (p) {
+      const bits = this.bitsNecessarios(p.addressSpaceBytes);
+
+      const addr = virtualAddr.toString(2).padStart(bits, "0");
+      console.log(this.sAddress(p, addr));
+    }
+  }
+
   translateForProcess(pid: number, virtualAddr: number) {
+    this.translate(pid, virtualAddr);
     this.time++;
     const p = this.processes.find((p) => p.pid === pid);
     if (!p) throw new Error(`Processo PID=${pid} não encontrado`);

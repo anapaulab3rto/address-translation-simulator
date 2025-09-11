@@ -82,6 +82,8 @@ export const MOCK_PROCESSES: Process[] = [
   {
     pid: 1,
     name: 'P1',
+    pageSizeBytes: 16,
+    addressSpaceBytes: 64,
     pageTable: [
       { pid: 1, pageNumber: 0, valid: false, offset: 12 },
       { pid: 1, pageNumber: 2, valid: false, offset: 45 },
@@ -90,6 +92,8 @@ export const MOCK_PROCESSES: Process[] = [
   {
     pid: 2,
     name: 'P2',
+    pageSizeBytes: 16,
+    addressSpaceBytes: 64,
     pageTable: [
       { pid: 2, pageNumber: 1, valid: false, offset: 7 },
       { pid: 2, pageNumber: 4, frameNumber: 0, valid: true, loadedAt: 7, offset: 28 },
@@ -98,6 +102,8 @@ export const MOCK_PROCESSES: Process[] = [
   {
     pid: 3,
     name: 'P3',
+    pageSizeBytes: 16,
+    addressSpaceBytes: 64,
     pageTable: [{ pid: 3, pageNumber: 3, frameNumber: 1, valid: true, loadedAt: 5, offset: 63 }],
   },
 ];
