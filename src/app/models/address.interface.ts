@@ -1,5 +1,7 @@
+import { Process } from "./process.interface";
+
 export interface Address {
-  pid?: number;
+  p?: Process;
   virtual?: string;
   physical?: string;
   pageNumber?: number;

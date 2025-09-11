@@ -19,6 +19,7 @@ export class InputAddress implements OnInit {
   activePid?: number;
   showHistory = false;
 
+
   virtual = 0;
   pid!: number;
 
@@ -44,8 +45,6 @@ export class InputAddress implements OnInit {
     const pidNumber = Number(this.pid);
 
     const res = this.memory.translate(pidNumber, this.virtual);
-    // this.history.unshift(res);
-    // if (this.history.length > 10) this.history.pop();
   }
 
   selectProcess() {

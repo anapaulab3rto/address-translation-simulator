@@ -5,6 +5,7 @@ import { MOCK_FRAMES, MOCK_PROCESSES } from '../mock/mock-data';
 import { BehaviorSubject } from 'rxjs';
 import { PageReplacement } from './page-replacement.service';
 import { PageTableEntry } from '../models/page-table-entry.interface';
+import { Address } from '../models/address.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,9 @@ export class MemoryService {
 
   private activePageTableSource = new BehaviorSubject<PageTableEntry[] | null>(null);
   activePageTable$ = this.activePageTableSource.asObservable();
+
+  private addressSource = new BehaviorSubject<any | null>(null);
+  address = this.addressSource.asObservable();
 
 
   repl = new PageReplacement();
@@ -30,6 +34,10 @@ export class MemoryService {
   private hits = 0;
 
   constructor() { }
+
+  setConfig() {
+    
+  }
 
   getProcesses() {
     return this.processes;
@@ -84,6 +92,7 @@ export class MemoryService {
           this.updatePTE(p, pageNumber, pte);
           const physical = pte.frameNumber + offset;
           console.log(physical);
+          this.setAddress(addr, physical, pte, p);
           return;
       }
 
@@ -92,11 +101,12 @@ export class MemoryService {
       let loaded = this.findPTE(p, pageNumber)!;
       loaded.loadedAt = this.time;
       loaded.valid = true;
+      loaded.offset = offset;
       loaded.frameNumber = frameNumber;
       this.updatePTE(p, pageNumber, loaded);
       const physical = loaded.frameNumber + offset;
       console.log(p);
-
+      this.setAddress(addr, physical, loaded, p);
       console.log(physical);
 
     }
@@ -246,6 +256,16 @@ export class MemoryService {
       this.activePageTableSource.next(null);
     }
 
+  }
+
+  setAddress(v: string, ph: string, pte: PageTableEntry, p: Process ) {
+    const response = {
+      virtual: v,
+      physical: ph,
+      pte: pte,
+      process: p,
+    }
+    this.addressSource.next(response);
   }
 
   setActiveProcess(process: Process | null) {

@@ -113,3 +113,111 @@ header p {
     color: #9575cd;
     margin: 0 12px; /* Margem da seta reduzida */
 }
+
+
+.page-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(128, 90, 213, 0.1);
+  background: #ffffff;
+}
+
+.page-table thead {
+  background: #e9ddf9;
+}
+
+.page-table th,
+.page-table td {
+  padding: 0.75rem;
+  border: 1px solid #e0d4f7;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.page-table th {
+  color: #4b3f72;
+  font-weight: 600;
+}
+
+.page-table tr:nth-child(even) {
+  background: #f8f5fc;
+}
+
+.row-invalid {
+  background: #f9f0ff !important;
+  opacity: 0.8;
+}
+
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.status-valid {
+  background: #d9f7d6;
+  color: #256029;
+}
+
+.status-invalid {
+  background: #fddede;
+  color: #a12626;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  background: #faf7fd;
+  border: 2px dashed #d6c9ef;
+  border-radius: 12px;
+  color: #7a669a;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+@media (max-width: 700px) {
+  .page-table,
+  .page-table thead,
+  .page-table tbody,
+  .page-table th,
+  .page-table td,
+  .page-table tr {
+    display: block;
+  }
+
+  .page-table thead {
+    display: none;
+  }
+
+  .page-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #e0d4f7;
+    border-radius: 10px;
+    background: #faf7fd;
+    padding: 0.5rem;
+  }
+
+  .page-table td {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+  }
+
+  .page-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #5e4b9a;
+    flex: 1;
+    padding-right: 0.5rem;
+    text-align: left;
+  }
+}

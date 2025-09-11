@@ -3,7 +3,7 @@ export interface PageTableEntry {
   pageNumber: any;
   showAddress?: boolean;
   frameNumber?: string;
-  offset?: number;
+  offset?: string;
   valid: boolean;
   referencedAt?: number;
   loadedAt?: number;
