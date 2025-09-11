@@ -8,6 +8,20 @@
   justify-content: center;
   width: 100%;
 }
+
+.a {
+  flex: 2;
+  max-width: 40vw;
+  height: 200vh;
+}
+
+.b {
+  flex: 1;
+  max-height: 100vh;
+  min-width: 60vw;
+  position: sticky;
+  top: 20px;
+}
 section {
   display: flex;
   justify-content: center;

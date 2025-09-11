@@ -6,29 +6,44 @@
         <main>
             <section class="step">
               <h2>O que precisamos?</h2>
-              <p>- Endereço Virtual</p>
+              <p>- Endereço Virtual (addr)</p>
               <p>- Page Table do processo</p>
-              <p>- Tamanho da pagina</p>
+              <p>- Tamanho da pagina (w) </p>
+              <p>- Espaço de endereçamento do processo (x)</p>
+              <p>- Bits do endereço virtual (y)</p>
+              <p></p>
             </section>
             <section class="step">
-                <h2>Passo 1: Separar a virtual page number(VPN) e o offset</h2>
-                <p>o endereço virtual é dividido em um <strong>número de página (p)</strong> e um <strong>deslocamento (d)</strong>.</p>
-                <p>como o endereço virtual so processo é x bytes, precisamos de y bits no total para nosso endereço virtual(2^y = x)</p>
-                <p>sabemos que a página é w bytes, em um espaço de endereçamento de x bytes</p>
-                <p>portanto temos x/w páginas</p>
-                <p>Para separar o VPN do Offset basta atribuir ao VPN a quantidade de bits necesários para representar a quantidade de páginas, o restante dos bits é o offset</p>
+                <h2>Passo 1: Calcular o número de bits do endereço virtual</h2>ckcocl
+                <p>como o espaço de endereçamento virtual do processo é x bytes, o endereço virtual é formado por y bits (2^y = x)</p>
+                <p>Pois se o endereço tiver y bits, então o número de combinações possíveis é: 2^y
+                <p>Cada combinação representa um endereço único.</p>
                 <div class="address-visual">
-                    <div class="address-part page-number">p</div>
-                    <div class="address-part offset">d</div>
+                    <div class="address-part page-number">vpn</div>
+                    <div class="address-part offset">offset</div>
                 </div>
             </section>
             <section class="step">
-                <h2>Passo 2: Verificar em que frame o page está armazenada</h2>
+                <h2>Passo 1: Separar a virtual page number(VPN) e o offset</h2>
+                <p>O endereço virtual é dividido em um <strong>número de página (p)</strong> e um <strong>deslocamento (d)</strong>.</p>
+                <p>como o espaço de endereçamento virtual do processo é x bytes, o endereço virtual é formado por y bits (2^y = x)</p>
+                <p>Pois se o endereço tiver y bits, então o número de combinações possíveis é: 2^y
+                <p>Cada combinação representa um endereço único.</p>
+                <p>Sabemos que a página tem w bytes, em um espaço de endereçamento de x bytes</p>
+                <p>Portanto temos x/w páginas</p>
+                <p>Para separar o VPN do Offset basta atribuir ao VPN a quantidade de bits necesários para representar a quantidade de páginas, o restante dos bits é o offset</p>
+                <div class="address-visual">
+                    <div class="address-part page-number">vpn</div>
+                    <div class="address-part offset">offset</div>
+                </div>
+            </section>
+            <section class="step">
+                <h2>Passo 2: Verificar o frame number de onde a page está armazenada na memória</h2>
                 <p>Acessamos o pageTable pelo VPN e verificamos o PageFrameNumber onde a Page está armazenada na memória</p>
                 <div class="flow-diagram">
-                    <div class="element">Endereço Virtual</div>
+                    <div class="element">Page Table</div>
                     <div class="arrow">&rarr;</div>
-                    <div class="element table">Tabela de Páginas</div>
+                    <div class="element table">Memória física</div>
                 </div>
             </section>
 
@@ -36,8 +51,8 @@
                 <h2>Passo 3: Formação do Endereço Físico</h2>
                 <p>O número do frame (f) é combinado com o deslocamento (d) original para formar o endereço físico final.</p>
                  <div class="address-visual">
-                    <div class="address-part frame-number">f</div>
-                    <div class="address-part offset">d</div>
+                    <div class="address-part frame-number">frame number</div>
+                    <div class="address-part offset">offset</div>
                 </div>
             </section>
         </main>

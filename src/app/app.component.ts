@@ -6,6 +6,7 @@ import { MemoryView } from './feature/memory-view/memory-view.component';
 import { PageTable } from './feature/page-table/page-table.component';
 import { MemoryService } from './service/memory.service';
 import { StepByStepGuideComponent } from './feature/step-by-step-guide/step-by-step-guide.component';
+import { PageTableEntry } from './models/page-table-entry.interface';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ export class AppComponent {
   replacementPolicy = 'FIFO'
 
   memoryFrames: PageFrame[] = []
+  pageTable: PageTableEntry[] = [];
 
   constructor(private memoryService: MemoryService) {
 
@@ -28,6 +30,7 @@ export class AppComponent {
 
   ngOnInit() {
     this.memoryFrames = this.memoryService.getMemoryFrames();
+    this.pageTable = this.memoryService.getActivePageTable() ?? [];
   }
 
 }

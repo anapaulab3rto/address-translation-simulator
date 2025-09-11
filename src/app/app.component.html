@@ -1,9 +1,12 @@
 <div class="page">
-  <div class="container">
+  <div class="container a">
+    <app-step-by-step-guide></app-step-by-step-guide>
+  </div>
+  <div class="container b">
     <section>
       <div class="config">
         <h3>Configuração da Memória</h3>
-        <label>Bits de endereço
+        <label>Tamanho do espaço de endereçamento digital (Bytes)
           <input type="number" [(ngModel)]="addressBits">
         </label>
 
@@ -30,12 +33,10 @@
       <app-input-address></app-input-address>
     </section>
     <section>
-      <app-page-table></app-page-table>
+      <app-page-table [entries]="pageTable"></app-page-table>
       <app-memory-view [pageFrames]="memoryFrames"></app-memory-view>
     </section>
   </div>
-  <div class="container">
-    <app-step-by-step-guide></app-step-by-step-guide>
-  </div>
+
 
 </div>
