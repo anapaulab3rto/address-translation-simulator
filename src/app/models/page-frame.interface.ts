@@ -1,6 +1,6 @@
 export interface PageFrame {
-  frameNumber: number;
-  pageNumber?: number;
+  frameNumber: string;
+  pageNumber?: string;
   occupied?: boolean;
   pid?: number;
   loadedAt?: number;

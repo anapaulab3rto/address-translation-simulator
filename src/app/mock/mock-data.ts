@@ -96,7 +96,7 @@ export const MOCK_PROCESSES: Process[] = [
     addressSpaceBytes: 64,
     pageTable: [
       { pid: 2, pageNumber: 1, valid: false, offset: 7 },
-      { pid: 2, pageNumber: 4, frameNumber: 0, valid: true, loadedAt: 7, offset: 28 },
+      { pid: 2, pageNumber: 4, frameNumber: "00", valid: true, loadedAt: 7, offset: 28 },
     ],
   },
   {
@@ -104,30 +104,30 @@ export const MOCK_PROCESSES: Process[] = [
     name: 'P3',
     pageSizeBytes: 16,
     addressSpaceBytes: 64,
-    pageTable: [{ pid: 3, pageNumber: 3, frameNumber: 1, valid: true, loadedAt: 5, offset: 63 }],
+    pageTable: [{ pid: 3, pageNumber: 3, frameNumber: "01", valid: true, loadedAt: 5, offset: 63 }],
   },
 ];
 
 export const MOCK_FRAMES: PageFrame[] = [
   {
-    frameNumber: 0,
+    frameNumber: '00',
     pid: 2,
-    pageNumber: 4,
+    pageNumber: "110",
     loadedAt: 7,
   },
   {
-    frameNumber: 1,
+    frameNumber: "01",
     pid: 3,
-    pageNumber: 3,
+    pageNumber: "011",
     loadedAt: 5,
   },
   {
-    frameNumber: 2,
+    frameNumber: "10",
     pid: undefined,
     pageNumber: undefined,
   },
   {
-    frameNumber: 3,
+    frameNumber: "11",
     pid: undefined,
     pageNumber: undefined,
   },

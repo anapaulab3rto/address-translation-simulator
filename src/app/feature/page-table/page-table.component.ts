@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect } from '@angular/core';
+import { Component, effect, Input } from '@angular/core';
 import { PageTableEntry } from '../../models/page-table-entry.interface';
 import { MemoryService } from '../../service/memory.service';
 import { Process } from '../../models/process.interface';
@@ -12,16 +12,18 @@ import { Process } from '../../models/process.interface';
 })
 export class PageTable {
   active?: Process | undefined;
-  entries: PageTableEntry[] = [];
+  @Input() entries: PageTableEntry[] = [];
 
   constructor(private memory: MemoryService) {}
 
   ngOnInit() {
-    this.memory.activeProcess$.subscribe(proc => {
-      this.active = proc ?? undefined;
-      this.entries = proc
-        ? [...proc.pageTable].sort((a, b) => a.pageNumber - b.pageNumber)
-        : [];
+    this.memory.activeProcess$.subscribe(p => {
+      this.active = p ?? undefined;
+    })
+    this.memory.activePageTable$.subscribe(pageTable => {
+      this.entries = pageTable ?? [];
+      console.log(pageTable);
+
     });
   }
 }

@@ -43,9 +43,9 @@ export class InputAddress implements OnInit {
   translate() {
     const pidNumber = Number(this.pid);
 
-    const res = this.memory.translateForProcess(pidNumber, this.virtual);
-    this.history.unshift(res);
-    if (this.history.length > 10) this.history.pop();
+    const res = this.memory.translate(pidNumber, this.virtual);
+    // this.history.unshift(res);
+    // if (this.history.length > 10) this.history.pop();
   }
 
   selectProcess() {

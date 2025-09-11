@@ -1,8 +1,8 @@
 export interface PageTableEntry {
   pid: number;
-  pageNumber: number;
+  pageNumber: any;
   showAddress?: boolean;
-  frameNumber?: number;
+  frameNumber?: string;
   offset?: number;
   valid: boolean;
   referencedAt?: number;

@@ -11,7 +11,7 @@
     <tbody>
       @for (f of pageFrames; track $index) {
         <tr [class.occupied]="f.pid !== null">
-          <td>#{{ f.frameNumber !== undefined ? (f.frameNumber.toString(2)) : '-' }}</td>
+          <td>#{{ f.frameNumber !== undefined ? (f.frameNumber) : '-' }}</td>
           <td>{{ f.pageNumber ?? '-' }}</td>
           <td>{{ f.pid ?? '-' }}</td>
         </tr>
