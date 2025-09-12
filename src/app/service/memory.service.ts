@@ -195,7 +195,7 @@ export class MemoryService {
       this.hits++;
       let frame = this.pageFrames.find(f => f.frameNumber === pte.frameNumber);
       pte.referencedAt = this.time;
-      frame!.referenciedAt = this.time;
+      frame!.referencedAt = this.time;
       this.updatePTE(p, pageNumber, pte);
       const physical = pte.frameNumber + offset;
       this.setAddress(addr, physical, pageNumber, offset, pte.frameNumber, p);
@@ -207,7 +207,7 @@ export class MemoryService {
     const frameNumber = this.loadPageForProcess(p.pid, pageNumber, pte);
     const loadedPTE = { ...this.findPTE(p, pageNumber)! };
     let frame = this.pageFrames.find(f => f.frameNumber === frameNumber);
-    frame!.referenciedAt = this.time;
+    frame!.referencedAt = this.time;
     frame!.loadedAt = this.time;
     loadedPTE.loadedAt = this.time;
     loadedPTE.referencedAt = this.time;

@@ -1,7 +1,6 @@
 import { PageFrame } from './models/page-frame.interface';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
-import { InputAddress } from './feature/input-address/input-address.component';
 import { MemoryView } from './feature/memory-view/memory-view.component';
 import { PageTable } from './feature/page-table/page-table.component';
 import { MemoryService } from './service/memory.service';
@@ -34,7 +33,7 @@ export class AppComponent {
     this.pageTable = this.memoryService.getActivePageTable() ?? [];
   }
 
-  setCOnfig() {
+  setConfig() {
     this.memoryService.setConfig(this.config);
   }
 

@@ -4,5 +4,5 @@ export interface PageFrame {
   occupied?: boolean;
   pid?: number;
   loadedAt?: number;
-  referenciedAt?: number;
+  referencedAt?: number;
 }

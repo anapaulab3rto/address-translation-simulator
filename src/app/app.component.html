@@ -1,43 +1,36 @@
-<div class="page">
-  <div class="container a">
+<div class="page-container">
+  <div class="content-column">
     <app-step-by-step-guide></app-step-by-step-guide>
   </div>
-  <div class="container b">
-    <section>
+  <div class="sidebar-column">
+    <div class="sidebar-content">
       <app-page-table></app-page-table>
+        <div class="row-container">
+          <div class="config widget">
+            <h3>Configuração</h3>
+            <label>Espaço de Endereçamento (Bytes)
+              <input type="number" [(ngModel)]="config.addressSpace">
+            </label>
+            <label>Tamanho da Página (Bytes)
+              <input type="number" [(ngModel)]="config.pageSizeBytes">
+            </label>
+            <label>Quantidade de Quadros
+              <input type="number" [(ngModel)]="config.framesCount">
+            </label>
+            <label>Política de Substituição
+              <select [(ngModel)]="config.replacementPolicy">
+                <option value="FIFO">FIFO</option>
+                <option value="LRU">LRU</option>
+              </select>
+            </label>
+            <div class="actions">
+              <button class="btn btn-primary" (click)="setConfig()">Aplicar</button>
+              <button class="btn btn-secondary">Reset</button>
+            </div>
 
-    </section>
-    <section>
-      <div class="config">
-        <h3>Configuração da Memória</h3>
-        <label>Tamanho do espaço de endereçamento digital (Bytes)
-          <input type="number" [(ngModel)]="config.addressSpace">
-        </label>
-
-        <label>Tamanho da página (bytes)
-          <input type="number" [(ngModel)]="config.pageSizeBytes">
-        </label>
-
-        <label>Quantidade de quadros
-          <input type="number" [(ngModel)]="config.framesCount">
-        </label>
-
-        <label>Política de substituição
-          <select [(ngModel)]="config.replacementPolicy">
-            <option value="FIFO">FIFO</option>
-            <option value="LRU">LRU</option>
-          </select>
-        </label>
-
-        <div class="actions">
-          <button type="button" (click)="setCOnfig()">Aplicar</button>
-          <button type="button">Reset</button>
+          </div>
+          <app-memory-view></app-memory-view>
         </div>
-      </div>
-      <app-memory-view></app-memory-view>
-    </section>
-
+    </div>
   </div>
-
-
 </div>

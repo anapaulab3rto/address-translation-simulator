@@ -102,12 +102,15 @@ export const MOCK_FRAMES: PageFrame[] = [
     pid: 2,
     pageNumber: "11",
     loadedAt: 7,
+    referencedAt: 1,
+
   },
   {
     frameNumber: "01",
     pid: 3,
     pageNumber: "11",
     loadedAt: 5,
+    referencedAt: 3,
   },
   {
     frameNumber: "10",

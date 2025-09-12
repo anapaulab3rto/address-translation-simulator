@@ -6,17 +6,18 @@
         <th>Quadro</th>
         <th>Página</th>
         <th>PID</th>
-        <th>Tempo</th>
+        <th>load at</th>
+        <th>Ref at</th>
       </tr>
     </thead>
     <tbody>
       @for (f of pageFrames(); track $index) {
         <tr [class.occupied]="f.pid !== null">
-          <td>#{{ f.frameNumber !== undefined ? (f.frameNumber) : '-' }}</td>
-          <td>{{ f.pageNumber ?? '-' }}</td>
-          <td>{{ f.pid ?? '-' }}</td>
-          <td>{{ f.loadedAt ?? '-' }}</td>
-          <td>{{ f.referenciedAt ?? '-' }}</td>
+          <td data-label="Quadro">#{{ f.frameNumber }}</td>
+          <td data-label="Página">{{ f.pageNumber ?? '-' }}</td>
+          <td data-label="PID">{{ f.pid ?? '-' }}</td>
+          <td data-label="Carregado">{{ f.loadedAt ?? '-' }}</td>
+          <td data-label="Referenciado">{{ f.referencedAt ?? '-' }}</td>
         </tr>
       }
     </tbody>

@@ -14,15 +14,15 @@ export class StepByStepGuideComponent {
   vpn = computed(() => this.memory.address()?.vpn ?? 'vpn');
   offset = computed(() => this.memory.address()?.offset ?? 'd');
   f = computed(() => this.memory.address()?.vfn ?? 'frame');
+  x = computed(() => this.memory.address()?.spaceAddr ?? "x");
+  w = computed(() => this.memory.address()?.pageSizeBytes ?? "w");
+  y = computed(() => this.memory.bitsNecessarios(Number(this.memory.address()?.spaceAddr ?? "y")) ?? "y");
 
-  x = computed(() => this.memory.address()?.spaceAddr ?? 0);
-  w = computed(() => this.memory.address()?.pageSizeBytes ?? 0);
-  y = computed(() =>
-    this.memory.bitsNecessarios(Number(this.memory.address()?.spaceAddr ?? 0)).toString()
-  );
+  constructor(public memory: MemoryService) { }
 
-  constructor(public memory: MemoryService) {}
-
+  binarioParaDecimal(bin: string): number {
+    return parseInt(bin, 2);
+  }
 
 
 }

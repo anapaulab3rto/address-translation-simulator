@@ -1,104 +1,69 @@
-<div class="container">
+<div class="guide-container">
   <header>
-    <h1>Passo a Passo Para a tradução do endereço</h1>
+    <h1>Tradução de Endereço Virtual</h1>
+    <p><i>Ao realizar traduções os valores de exemplo serão adaptados</i></p>
   </header>
   <main>
     <section class="step">
-      <h2>O que precisamos?</h2>
-      <p>- Endereço Virtual ({{addr()}})</p>
-      <p>- Page Table do processo</p>
-      <p>- Tamanho da pagina ({{w()}}) </p>
-      <p>- Espaço de endereçamento do processo ({{x()}})</p>
-      <p>- Bits do endereço virtual ({{y()}})</p>
-      <p></p>
+      <h2>Dados Iniciais</h2>
+      <ul>
+        <li><strong>Endereço Virtual:</strong> {{binarioParaDecimal(addr())}}</li>
+        <li><strong>Tamanho da Página:</strong> {{w()}} bytes</li>
+        <li><strong>Espaço de Endereçamento:</strong> {{x()}} bytes</li>
+        <li><strong>Total de Bits do Endereço:</strong> {{y()}} (pois 2<sup>{{y()}}</sup> = {{x()}})</li>
+      </ul>
     </section>
+
     <section class="step">
-      <h2>Passo 1: Calcular o número de bits do endereço virtual</h2>ckcocl
-      <p>como o espaço de endereçamento virtual do processo é {{x()}} by()tes, o endereço virtual é formado por {{y()}}
-        bits
-        (2^{{y()}} = {{x()}})</p>
-      <p>Pois se o endereço tiver {{y()}} bits, então o número de combinações possíveis é: 2^{{y()}}
-      <p>Cada combinação representa um endereço único.</p>
-      <div class="address-visual">
-        <div class="address-part page-number">{{vpn()}}</div>
-        <div class="address-part offset">{{offset()}}</div>
+      <h2>Passo 1: Converter Endereço Virtual para Binário</h2>
+      <p>
+        O primeiro passo é converter o endereço virtual decimal em sua representação binária, usando o total de <strong>{{y()}} bits</strong> definidos pelo espaço de endereçamento.
+      </p>
+      <div class="conversion-visual">
+        <span class="decimal">{{binarioParaDecimal(addr())}}</span>
+        <span class="arrow">→</span>
+        <span class="binary">{{ addr() }}</span>
       </div>
     </section>
+
     <section class="step">
-      <h2>Passo 1: Separar a virtual page number(VPN) e o offset</h2>
-      <p>O endereço virtual é dividido em um <strong>número de página (p)</strong> e um <strong>deslocamento
-          (d)</strong>.</p>
-      <p>como o espaço de endereçamento virtual do processo é {{x()}} b{{y()}}tes, o endereço virtual é formado por
-        {{y()}}
-        bits (2^{{y()}} = {{x()}})</p>
-      <p>Pois se o endereço tiver {{y()}} bits, então o número de combinações possíveis é: 2^{{y()}}
-      <p>Cada combinação representa um endereço único.</p>
-      <p>Sabemos que a página tem {{w()}} b{{y()}}tes, em um espaço de endereçamento de {{x()}} b{{y()}}tes</p>
-      <p>Portanto temos {{x()}}/{{w()}} páginas</p>
-      <p>Para separar o VPN do Offset basta atribuir ao VPN a quantidade de bits necesários para representar a
-        quantidade de páginas, o restante dos bits é o offset</p>
+      <h2>Passo 2: Dividir Endereço Binário em VPN e Offset</h2>
+      <p>O endereço virtual binário é dividido em um <strong>Número da Página (VPN)</strong> e um <strong>Deslocamento (Offset)</strong>.</p>
+      <p>Sabemos que a página tem {{w()}} bytes. Para separar o VPN do Offset, atribuímos ao VPN a quantidade de bits necessários para representar o número total de páginas ({{x()/w()}}), e o restante dos bits se torna o Offset.</p>
       <div class="address-visual">
-        <div class="address-part page-number">{{vpn()}}</div>
-        <div class="address-part offset">{{offset()}}</div>
+        <div class="address-part page-number" title="Número da Página Virtual">{{vpn()}}</div>
+        <div class="address-part offset" title="Offset">{{offset()}}</div>
       </div>
     </section>
+
     <section class="step">
-      <h2>Passo 2: Verificar o frame number de onde a page está armazenada na memória</h2>
-      <p>Acessamos o pageTable pelo VPN e verificamos o PageFrameNumber onde a Page está armazenada na memória</p>
+      <h2>Passo 3: Consultar a Tabela de Páginas</h2>
+       <p>Acessamos a Tabela de Páginas usando o VPN como índice e verificamos o Número do Quadro (Frame Number) onde a página está armazenada na memória física.</p>
       <div class="flow-diagram">
-        <div class="element">Page Table</div>
+        <div class="element">VPN ({{vpn()}})</div>
         <div class="arrow">&rarr;</div>
-        <div class="element table">Memória física</div>
-      </div>
-      <div>
-        <table class="page-table">
-          <thead>
-            <tr>
-              <th>Página</th>
-              <th>Ativa</th>
-              <th>Quadro</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <td data-label="Página">{{ vpn() }}</td>
-              <td data-label="Válida">
-                <span class="status status-valid">
-                  'Sim'
-                </span>
-              </td>
-              <td data-label="Quadro">{{f() !== undefined ? (f()) : '-'}}</td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="element table">Tabela de Páginas</div>
+        <div class="arrow">&rarr;</div>
+        <div class="element frame">Quadro ({{f() ?? '?'}})</div>
       </div>
     </section>
 
     <section class="step">
-      <h2>Passo 2.5: Caso a pagina ainda não tenha um frame number atribuido</h2>
-      <p>O page table entry() (PTE) correspondente não está na memória → page fault.</p>
-      <p>O sistema operacional apenas procura um frame livre na memória.</p>
-
-      <p>Porém se a memória física já está cheia (todos os frames ocupados).</p>
-      <p>O SO precisa escolher uma página já carregada na memória para remover.</p>
-
-      <p>Isso é a política de substituição de páginas (page replacement policy()).</p>
-      <p>O frame da página vítima fica livre.</p>
-      <p>A nova página é carregada para esse frame.</p>
-      <p>A tabela de páginas é atualizada:</p>
-      <p>Página nova → valid = true, frameNumber = (frame escolhido)</p>
-      <p>Página vítima → valid = false</p>
-
+      <h2>Passo 4: Tratamento de Page Fault</h2>
+      <p>Se a entrada na tabela (PTE) for inválida, ocorre um <strong>page fault</strong>.</p>
+      <p>O Sistema Operacional procura um quadro livre na memória. Se a memória estiver cheia, a <strong>política de substituição de páginas</strong> é acionada para liberar um quadro. A Tabela de Páginas é então atualizada para a página nova (valid=true) e para a página vítima (valid=false).</p>
     </section>
 
     <section class="step">
-      <h2>Passo 3: Formação do Endereço Físico</h2>
-      <p>O número do frame ({{f()}}) é combinado com o offset ({{offset()}}) original para formar o endereço físico final.</p>
+      <h2>Passo 5: Formar o Endereço Físico</h2>
+      <p>O endereço físico final é formado pela combinação do <strong>Número do Quadro ({{f()}})</strong> obtido da tabela com o <strong>Offset ({{offset()}})</strong> original do endereço virtual.</p>
       <div class="address-visual">
-        <div class="address-part frame-number">{{f()}}</div>
-        <div class="address-part offset">{{offset()}}</div>
+        <div class="address-part frame-number" title="Número do Quadro">{{f()}}</div>
+        <div class="address-part offset" title="Offset">{{offset()}}</div>
       </div>
     </section>
   </main>
+  <footer>
+    <p>Baseado nos conceitos do livro: <em>Operating Systems: Three Easy Pieces</em>.</p>
+  </footer>
 </div>

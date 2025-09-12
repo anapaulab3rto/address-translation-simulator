@@ -1,58 +1,81 @@
 .memory-view {
-  padding: 1rem;
-  width: 300px;
   background: #faf7fd;
-  border-radius: 12px;
   font-family: "Segoe UI", sans-serif;
   color: #4b3f72;
-
-  h3 {
-    color: #5e4b9a;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+  flex-grow: 1;
+  max-width: 410px;
+  min-width: 200px;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(128, 90, 213, 0.1);
+  border: 1px solid #e9ddf9;
+}
+.memory-view h3 {
+  color: #5e4b9a;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+.physical-memory-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(128, 90, 213, 0.08);
+  background: #ffffff;
+}
+.physical-memory-table thead {
+  background: #e9ddf9;
+}
+.physical-memory-table th,
+.physical-memory-table td {
+  padding: 0.85rem;
+  border: 1px solid #e0d4f7;
+  text-align: center;
+  font-size: 0.95rem;
+}
+.physical-memory-table th {
+  color: #4b3f72;
+  font-weight: 600;
+}
+.physical-memory-table tbody tr {
+  background-color: #ffffff;
+  transition: background-color 0.3s ease;
+}
+.physical-memory-table tbody tr.occupied {
+  background-color: #f8f5fc;
+  font-weight: 500;
+}
+@media (max-width: 700px) {
+  .physical-memory-table thead {
+    display: none;
   }
-
-  .physical-memory-table {
-    width: 100%;
-    border-collapse: collapse;
+  .physical-memory-table tr, .physical-memory-table td, .physical-memory-table {
+      display: block;
+  }
+  .physical-memory-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #e0d4f7;
     border-radius: 10px;
-    overflow: hidden;
-    background: #ffffff;
-
-    thead {
-      background: #e9ddf9;
-
-      th {
-        padding: 0.75rem;
-        text-align: center;
-        font-weight: 600;
-        color: #4b3f72;
-        font-size: 0.9rem;
-        border: 1px solid #e0d4f7;
-      }
-    }
-
-    tbody {
-      tr {
-        &:nth-child(even) {
-          background: #f8f5fc;
-        }
-
-        &.occupied {
-          td {
-            background: #b892ff;
-            color: #fff;
-            font-weight: 600;
-          }
-        }
-
-        td {
-          padding: 0.6rem;
-          text-align: center;
-          border: 1px solid #e0d4f7;
-          font-size: 0.85rem;
-        }
-      }
-    }
+    padding: 0.75rem;
+  }
+  .physical-memory-table tr.occupied {
+    background-color: #faf7fd;
+  }
+  .physical-memory-table td {
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.25rem;
+    text-align: right;
+  }
+  .physical-memory-table td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: #5e4b9a;
+    text-align: left;
+    padding-right: 1rem;
   }
 }
