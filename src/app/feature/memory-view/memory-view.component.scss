@@ -48,34 +48,34 @@
   font-weight: 500;
 }
 @media (max-width: 700px) {
-  .physical-memory-table thead {
-    display: none;
-  }
-  .physical-memory-table tr, .physical-memory-table td, .physical-memory-table {
-      display: block;
-  }
-  .physical-memory-table tr {
-    margin-bottom: 1rem;
-    border: 1px solid #e0d4f7;
-    border-radius: 10px;
-    padding: 0.75rem;
-  }
-  .physical-memory-table tr.occupied {
-    background-color: #faf7fd;
-  }
-  .physical-memory-table td {
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0.5rem 0.25rem;
-    text-align: right;
-  }
-  .physical-memory-table td::before {
-    content: attr(data-label);
-    font-weight: 600;
-    color: #5e4b9a;
-    text-align: left;
-    padding-right: 1rem;
-  }
+  // .physical-memory-table thead {
+  //   display: none;
+  // }
+  // .physical-memory-table tr, .physical-memory-table td, .physical-memory-table {
+  //     display: block;
+  // }
+  // .physical-memory-table tr {
+  //   margin-bottom: 1rem;
+  //   border: 1px solid #e0d4f7;
+  //   border-radius: 10px;
+  //   padding: 0.75rem;
+  // }
+  // .physical-memory-table tr.occupied {
+  //   background-color: #faf7fd;
+  // }
+  // .physical-memory-table td {
+  //   border: none;
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  //   padding: 0.5rem 0.25rem;
+  //   text-align: right;
+  // }
+  // .physical-memory-table td::before {
+  //   content: attr(data-label);
+  //   font-weight: 600;
+  //   color: #5e4b9a;
+  //   text-align: left;
+  //   padding-right: 1rem;
+  // }
 }
