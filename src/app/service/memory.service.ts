@@ -2,7 +2,6 @@ import { Injectable, signal } from '@angular/core';
 import { PageFrame } from '../models/page-frame.interface';
 import { Process } from '../models/process.interface';
 import { MOCK_FRAMES, MOCK_PROCESSES } from '../mock/mock-data';
-import { BehaviorSubject } from 'rxjs';
 import { PageReplacement } from './page-replacement.service';
 import { PageTableEntry } from '../models/page-table-entry.interface';
 import { ConfigMemory } from '../models/config-memory.interface';
@@ -18,10 +17,9 @@ export class MemoryService {
 
   repl = new PageReplacement();
   addressSpace = 64;
-  addressBits = this.bitsNecessarios(64);
   pageSizeBytes = 16;
-  framesCount = 10;
-  replacementPolicy!: 'FIFO' | "LRU";
+  framesCount = 7;
+  replacementPolicy!: 'FIFO' | 'LRU';
 
   private pageFrames: PageFrame[] = MOCK_FRAMES;
   private processes: Process[] = MOCK_PROCESSES;
@@ -29,7 +27,9 @@ export class MemoryService {
   private faults = 0;
   private hits = 0;
 
-  constructor() { }
+  constructor() {
+    this.activePageFrames.set([...this.pageFrames]);
+  }
 
   setConfig(config: ConfigMemory) {
     this.addressSpace = config.addressSpace;
@@ -37,238 +37,193 @@ export class MemoryService {
     this.replacementPolicy = config.replacementPolicy;
     this.framesCount = config.framesCount;
 
-    this.pageFrames = new Array(this.framesCount).fill(null);
-    this.time = 0;
-    this.faults = 0;
-    this.hits = 0;
-
     this.pageFrames = Array.from({ length: this.framesCount }, (_, i): PageFrame => {
-      const frameNumber = i.toString(2).padStart(this.bitsNecessarios(this.framesCount), "0");
-      const mock = MOCK_FRAMES[i];
+      const bits = this.bitsNecessarios(this.framesCount);
+      const frameNumber = i.toString(2).padStart(bits, '0');
+      return { frameNumber, occupied: false };
+    }
+    );
 
-      return mock
-        ? { ...mock, frameNumber }
-        : { frameNumber, occupied: false };
-    });
+    for (let p of this.processes) p.pageTable = [];
 
     this.activePageFrames.set([...this.pageFrames]);
+    this.activePageTable.set([]);
+    this.activeProcess.set(null);
   }
 
   getProcesses() {
     return this.processes;
   }
 
+  getAddressSpace(): number {
+    return this.addressSpace;
+  }
+
   getMemoryFrames() {
     return this.pageFrames;
   }
 
-  private allPteEntries(): PageTableEntry[] {
-    return this.processes.flatMap(p => p.pageTable);
+  bitsNecessarios(n: number): number {
+    if (n === 0) return 1;
+    return Math.ceil(Math.log2(n));
+  }
+
+  getValidPageTables(): PageTableEntry[] {
+    const validEntries: PageTableEntry[] = [];
+
+    this.processes.forEach(process => {
+      process.pageTable.forEach(entry => {
+        if (entry.valid) {
+          validEntries.push(entry);
+        }
+      });
+    });
+
+    return validEntries;
+  }
+
+  getNumberOfPages() {
+    return this.addressSpace / this.pageSizeBytes;
   }
 
   sAddress(p: Process, addr: string) {
-    const numberOfPages = this.getNumberOfPages(p);
-    const pageNumber = this.bitsNecessarios(numberOfPages);
-
-    const resultado = {
-      pageNumber: addr.slice(0, pageNumber),
-      offset: addr.slice(pageNumber)
+    const numberOfPages = this.getNumberOfPages();
+    const pageNumberBits = this.bitsNecessarios(numberOfPages);
+    return {
+      pageNumber: addr.slice(0, pageNumberBits),
+      offset: addr.slice(pageNumberBits),
     };
-    return resultado;
   }
 
-  bitsNecessarios(n: number): number {
-    if (n === 0) return 1;
-    return Math.floor(Math.log2(n));
-  }
-
-  getNumberOfPages(p: Process) {
-    return p.addressSpaceBytes / p.pageSizeBytes;
-  }
-
-  translate(pid: number, virtualAddr: number) {
-    const p = this.processes.find(p => p.pid === pid);
-
-    if (p) {
-      const bits = this.bitsNecessarios(this.addressSpace);
-      const addr = virtualAddr.toString(2).padStart(bits, "0");
-      const { pageNumber, offset } = this.sAddress(p, addr);
-
-      let pte: any = this.findPTE(p, pageNumber);
-
-      if (!pte) {
-        pte = this.alocatePTE(p, pageNumber);
-      }
-
-      if (pte.valid && pte.frameNumber !== undefined) {
-        this.hits++;
-        pte.referencedAt = this.time;
-        this.updatePTE(p, pageNumber, pte);
-        const physical = pte.frameNumber + offset;
-        console.log(physical);
-        this.setAddress(addr, physical, pte, p);
-        return;
-      }
-
-      this.faults++
-      const frameNumber = this.loadPageForProcess(p.pid, pageNumber, pte);
-      let loaded = this.findPTE(p, pageNumber)!;
-      loaded.loadedAt = this.time;
-      loaded.valid = true;
-      loaded.offset = offset;
-      loaded.frameNumber = frameNumber;
-      this.updatePTE(p, pageNumber, loaded);
-      const physical = loaded.frameNumber + offset;
-      console.log(p);
-      this.setAddress(addr, physical, loaded, p);
-      console.log(physical);
-
-    }
+  createProcess(pid: number, name: string) {
+    const pageTable: PageTableEntry[] = [];
+    this.processes.push({ pid, name, pageTable });
   }
 
   findPTE(p: Process, pageNumber: string) {
-    return p.pageTable.find(e => e.pageNumber === pageNumber);
+    return p.pageTable.find((e) => e.pageNumber === pageNumber);
   }
 
   alocatePTE(p: Process, pageNumber: string) {
-    const pte = { pid: p.pid, pageNumber, valid: false };
+    console.log('aqui');
+
+    const pte: PageTableEntry = { pid: p.pid, pageNumber, valid: false };
     p.pageTable = [...p.pageTable, pte];
     this.activePageTable.set([...p.pageTable]);
+
+    if (this.activeProcess()?.pid === p.pid) {
+      this.activeProcess.set({ ...p });
+    }
+    console.log(p);
+
+
     return pte;
   }
 
   updatePTE(p: Process, pageNumber: string, newPTE: PageTableEntry) {
-    p.pageTable = p.pageTable.map((e) =>
-      e.pageNumber === pageNumber ? { ...newPTE } : e
+    const oldPTE = p.pageTable.find(e => e.pageNumber === pageNumber);
+    const finalPTE = { ...oldPTE, ...newPTE };
+
+    const newPageTable = p.pageTable.map((e) =>
+      e.pageNumber === pageNumber ? finalPTE : e
     );
-    this.activePageTable.set([...p.pageTable]);
+
+    p.pageTable = newPageTable;
+    this.activePageTable.set([...newPageTable]);
+
+    if (this.activeProcess()?.pid === p.pid) {
+      this.activeProcess.set({ ...p });
+    }
   }
 
   findProcessByPID(pid: number) {
-    return this.processes.find(p => p.pid === pid);
+    return this.processes.find((p) => p.pid === pid);
   }
 
   loadPageForProcess(pid: number, pageNumber: string, pte: PageTableEntry) {
-    const idx = this.pageFrames.findIndex((f) => f.pageNumber === undefined);
-    if (idx !== -1) {
-      const newFrame: PageFrame = {
-        ...this.pageFrames[idx],
-        pageNumber,
-        pid,
-      };
+    const free = this.pageFrames.find(f => !f.pid);
+    console.log(free);
+    console.log(this.pageFrames);
 
-      this.pageFrames = [
-        ...this.pageFrames.slice(0, idx),
-        newFrame,
-        ...this.pageFrames.slice(idx + 1),
-      ];
 
-      this.activePageFrames.set([...this.pageFrames]); // 🚀 dispara update
-      return newFrame.frameNumber;
+    if (free) {
+      free.pageNumber = pageNumber;
+      free.pid = pid;
+      this.activePageFrames.set([...this.pageFrames]);
+      return free.frameNumber;
     }
 
-    return '00';
+    const victimPTE = this.repl.chooseVictimFrame(this.replacementPolicy, this.getValidPageTables());
+
+    if (!victimPTE) {
+      const fallback = { ...this.pageFrames[0], pageNumber, pid, occupied: true };
+      this.pageFrames = [fallback, ...this.pageFrames.slice(1)];
+      this.activePageFrames.set([...this.pageFrames]);
+      return fallback.frameNumber;
+    }
+
+    const victimFrame = this.pageFrames.find(f => f.frameNumber === victimPTE.frameNumber);
+    victimFrame!.pageNumber = pageNumber;
+    victimFrame!.pid = pid;
+    this.activePageFrames.set([...this.pageFrames]);
+
+    victimPTE.valid = false;
+    victimPTE.frameNumber = undefined;
+
+    this.activePageTable.set([...this.getActiveProcess()?.pageTable ?? []]);
+
+    return victimFrame!.frameNumber;
+
   }
-  //   translateForProcess(pid: number, virtualAddr: number) {
-  //     this.translate(pid, virtualAddr);
-  //     this.time++;
-  //     const p = this.processes.find((p) => p.pid === pid);
-  //     if (!p) throw new Error(`Processo PID=${pid} não encontrado`);
-
-  //     const { pageNumber, offset } = this.splitAddress(virtualAddr);
-
-  //     let pte = p.pageTable.find(
-  //       (e) => e.pageNumber === pageNumber && e.pid === pid
-  //     );
-
-  //     if (!pte) {
-  //       pte = { pid, pageNumber, valid: false };
-  //       p.pageTable.push(pte);
-  //     }
-
-  //     if (pte.valid && pte.frameNumber !== undefined) {
-  //       this.hits++;
-  //       pte.referencedAt = this.time;
-  //       const physical = pte.frameNumber * this.pageSizeBytes + offset;
-  //       return {
-  //         pid: pid,
-  //         virtual: virtualAddr.toString(2),
-  //         physical: physical.toString(2),
-  //         pageNumber,
-  //         offset,
-  //         hit: true,
-  //         timestamp: this.time,
-  //       };
-  //     }
-
-  //     this.faults++;
-  //     this.loadPageForProcess(pid, pageNumber);
-
-  //     const loaded = p.pageTable.find(
-  //       (e) => e.pageNumber === pageNumber && e.pid === pid
-  //     )!;
-  //     loaded.referencedAt = this.time;
-  //     const physical = loaded.frameNumber! * this.pageSizeBytes + offset;
-  //     return {
-  //       pid: pid,
-  //       virtual: virtualAddr.toString(2),
-  //       physical: physical.toString(2),
-  //       pageNumber,
-  //       offset,
-  //       hit: false,
-  //       timestamp: this.time,
-  //     };
-  //   }
-
-  //   loadPageForProcess(pid: number, pageNumber: string) {
-  //     const free = this.pageFrames.find((f) => f.pageNumber === undefined);
-  //     if (free) {
-  //       this.mapPageToFrame(pid, pageNumber, free.frameNumber);
-  //       return;
-  //     }
-
-  //     const victim = this.repl.chooseVictimFrame(this.replacementPolicy, this.allPteEntries());
-
-  //     if (!victim || victim.frameNumber === undefined) {
-  //       this.mapPageToFrame(pid, pageNumber, '0');
-  //       return;
-  //     }
-  //   }
-
-  //   private mapPageToFrame(
-  //     pid: number,
-  //     pageNumber: string,
-  //     frameNumber: string
-  //   ): void {
-  //     const frame = this.pageFrames[frameNumber];
-  //     frame.pageNumber = pageNumber;
-  //     frame.pid = pid;
-
-  //     let proc = this.processes.find((p) => p.pid === pid)!;
-
-  //     let pte = proc.pageTable.find(
-  //       (e) => e.pageNumber === pageNumber && e.pid === pid
-  //     );
-
-  //     if (!pte) {
-  //       pte = { pid, pageNumber, valid: false };
-  //       console.log('aq');
-
-  //       proc.pageTable.push(pte);
-  //     }
-  //     pte.valid = true;
-  //     pte.frameNumber = frameNumber;
-  //     pte.loadedAt = this.time;
-  //     pte.referencedAt = this.time;
-
-  //     console.log(this.getActiveProcess()?.pageTable);
 
 
-  //     this.setActiveProcess(this.getActiveProcess());
-  //   }
+  translate(pid: number, virtualAddr: number) {
+    const p = this.processes.find((p) => p.pid === pid);
+    if (!p) return;
 
-   setProcessActive(pid: number) {
-    const process = this.processes.find((p) => p.pid == pid);
+    this.time++;
+    const bits = this.bitsNecessarios(this.addressSpace);
+    const addr = virtualAddr.toString(2).padStart(bits, '0');
+    const { pageNumber, offset } = this.sAddress(p, addr);
+
+    let pte = this.findPTE(p, pageNumber);
+
+    if (!pte) pte = this.alocatePTE(p, pageNumber);
+
+
+    if (pte.valid && pte.frameNumber !== undefined) {
+      this.hits++;
+      let frame = this.pageFrames.find(f => f.frameNumber === pte.frameNumber);
+      pte.referencedAt = this.time;
+      frame!.referenciedAt = this.time;
+      this.updatePTE(p, pageNumber, pte);
+      const physical = pte.frameNumber + offset;
+      this.setAddress(addr, physical, pte, p);
+      this.setProcessActive(p.pid);
+      return p;
+    }
+
+    this.faults++;
+    const frameNumber = this.loadPageForProcess(p.pid, pageNumber, pte);
+    const loadedPTE = { ...this.findPTE(p, pageNumber)! };
+    let frame = this.pageFrames.find(f => f.frameNumber === frameNumber);
+    frame!.referenciedAt = this.time;
+    frame!.loadedAt = this.time;
+    loadedPTE.loadedAt = this.time;
+    loadedPTE.referencedAt = this.time;
+    loadedPTE.valid = true;
+    loadedPTE.offset = offset;
+    loadedPTE.frameNumber = frameNumber;
+    this.updatePTE(p, pageNumber, loadedPTE);
+
+    const physical = loadedPTE.frameNumber + offset;
+    this.setAddress(addr, physical, loadedPTE, p);
+    this.setProcessActive(p.pid);
+    return p;
+  }
+
+  setProcessActive(pid: number) {
+    const process = this.processes.find((p) => p.pid === pid);
     if (process) {
       this.activeProcess.set(process);
       this.activePageTable.set([...process.pageTable]);

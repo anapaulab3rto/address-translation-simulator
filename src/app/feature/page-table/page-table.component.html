@@ -1,24 +1,85 @@
+<div style="display: flex;">
+<div class="input-address">
+  <h3>Inserir Endereço Virtual</h3>
+  <div class="translate-row">
+    <div class="proc-actions">
+      Novo processo:
+      <div style="display: flex;">
+        <input type="number" [(ngModel)]="newProcessID" placeholder="ID" />
+        <input type="text" [(ngModel)]="newProcessName" placeholder="Nome do processo" />
+      </div>
+      <button (click)="createProcess()">Criar Processo</button>
+    </div>
+    <div>
+      Processo:
+      <label>
+        <select [(ngModel)]="pid" (ngModelChange)="selectProcess()">
+          @for (p of processes; track $index) {
+          <option [value]="p.pid">PID {{p.pid}} — {{p.name}}</option>
+          }
+        </select>
+      </label>
+
+      <label>
+        Endereço virtual:
+        <input type="number" [(ngModel)]="virtual" placeholder="Ex: 1024" />
+      </label>
+      <button type="button" (click)="translate()">Traduzir</button>
+    </div>
+
+    <button (click)="toggleHistory()" class="btn">
+      {{ showHistory ? 'Esconder histórico' : 'Ver histórico de traduções' }}
+    </button>
+    @if (showHistory) {
+    <h4>Últimas traduções</h4>
+    <table>
+      <thead>
+        <tr>
+          <th>PID</th>
+          <th>Virtual</th>
+          <th>Página</th>
+          <th>Offset</th>
+          <th>Físico</th>
+          <th>Hit?</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (a of history; track $index) {
+        <tr>
+          <td data-label="Virtual">{{a.virtual}}</td>
+          <td data-label="Página">{{a.pageNumber}}</td>
+          <td data-label="Offset">{{a.offset}}</td>
+          <td data-label="Físico">{{a.physical}}</td>
+          <td data-label="Hit?">{{a.hit ? '✔' : '✖'}}</td>
+        </tr>
+        }
+      </tbody>
+    </table>
+    }
+  </div>
+</div>
+
 <div class="pagetable-widget">
   <h3>Tabela de Páginas (Processo Atual)</h3>
 
   @if (active()) {
     <div>
       <p class="active-process-info">
-        <strong>Ativo:</strong> PID {{ active().pid }} — {{ active().name }}
+        <strong>Ativo:</strong> PID {{ active()?.pid }} — {{ active()?.name }}
       </p>
 
       <table class="page-table">
         <thead>
           <tr>
             <th>Página</th>
-            <th>Ativa</th>
+            <th>Válida</th>
             <th>Quadro</th>
-            <th>Endereço</th>
+            <th>Endereço Físico</th>
           </tr>
         </thead>
 
         <tbody>
-          @for (p of entries(); track $index) {
+          @for (p of entries; track $index) {
             <tr [class.row-invalid]="!p.valid">
               <td data-label="Página">{{ p.pageNumber }}</td>
               <td data-label="Válida">
@@ -46,4 +107,6 @@
       <span>Crie ou selecione um processo no painel de entrada.</span>
     </div>
   }
+</div>
+
 </div>

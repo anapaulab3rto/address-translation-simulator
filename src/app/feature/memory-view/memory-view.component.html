@@ -6,6 +6,7 @@
         <th>Quadro</th>
         <th>Página</th>
         <th>PID</th>
+        <th>Tempo</th>
       </tr>
     </thead>
     <tbody>
@@ -14,6 +15,8 @@
           <td>#{{ f.frameNumber !== undefined ? (f.frameNumber) : '-' }}</td>
           <td>{{ f.pageNumber ?? '-' }}</td>
           <td>{{ f.pid ?? '-' }}</td>
+          <td>{{ f.loadedAt ?? '-' }}</td>
+          <td>{{ f.referenciedAt ?? '-' }}</td>
         </tr>
       }
     </tbody>

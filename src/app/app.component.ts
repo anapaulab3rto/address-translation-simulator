@@ -11,7 +11,7 @@ import { ConfigMemory } from './models/config-memory.interface';
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, InputAddress, MemoryView, PageTable, StepByStepGuideComponent],
+  imports: [FormsModule, MemoryView, PageTable, StepByStepGuideComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -20,7 +20,7 @@ export class AppComponent {
   config: ConfigMemory = {
     addressSpace: 64,
     pageSizeBytes: 16,
-    framesCount: 10,
+    framesCount: 7,
     replacementPolicy: 'FIFO'
   }
 

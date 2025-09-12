@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Address } from '../../models/address.interface';
 import { Process } from '../../models/process.interface';
 import { MemoryService } from '../../service/memory.service';
@@ -23,7 +23,8 @@ export class InputAddress implements OnInit {
   virtual = 0;
   pid!: number;
 
-  newProcessName = ''
+  newProcessName = '';
+  newProcessID = 0;
 
   constructor(private memory: MemoryService) {}
 
@@ -31,7 +32,11 @@ export class InputAddress implements OnInit {
     this.loadProcesses();
   }
 
-  createProcess() {}
+  createProcess() {
+    this.memory.createProcess(this.newProcessID, this.newProcessName);
+    this.newProcessID = 0;
+    this.newProcessName = '';
+  }
 
   loadProcesses() {
     this.processes = this.memory.getProcesses();
@@ -43,8 +48,7 @@ export class InputAddress implements OnInit {
 
   translate() {
     const pidNumber = Number(this.pid);
-
-    const res = this.memory.translate(pidNumber, this.virtual);
+    this.memory.translate(pidNumber, this.virtual);
   }
 
   selectProcess() {
