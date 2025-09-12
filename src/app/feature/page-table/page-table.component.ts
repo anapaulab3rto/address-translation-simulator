@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed } from '@angular/core';
+import { Component, computed, effect } from '@angular/core';
 import { PageTableEntry } from '../../models/page-table-entry.interface';
 import { MemoryService } from '../../service/memory.service';
 import { FormGroup, FormsModule } from '@angular/forms';
@@ -30,7 +30,12 @@ export class PageTable {
   newProcessID = 0;
 
 
-  constructor(private memory: MemoryService) { }
+  constructor(private memory: MemoryService) {
+    effect(() => {
+      const current = this.active();
+      this.entries = this.memory.getActivePageTable() ?? [];
+  });
+  }
 
   ngOnInit() {
     this.loadProcesses();

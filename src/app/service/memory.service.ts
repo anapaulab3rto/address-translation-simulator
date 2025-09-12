@@ -50,6 +50,15 @@ export class MemoryService {
     this.activePageTable.set([]);
     this.activeProcess.set(null);
   }
+  reset() {
+    this.addressSpace = 64;
+    this.pageSizeBytes = 16;
+    this.framesCount = 7;
+    this.replacementPolicy = 'FIFO';
+
+    this.pageFrames = MOCK_FRAMES;
+    this.processes = MOCK_PROCESSES;
+  }
 
   getProcesses() {
     return this.processes;
@@ -105,8 +114,6 @@ export class MemoryService {
   }
 
   alocatePTE(p: Process, pageNumber: string) {
-    console.log('aqui');
-
     const pte: PageTableEntry = { pid: p.pid, pageNumber, valid: false };
     p.pageTable = [...p.pageTable, pte];
     this.activePageTable.set([...p.pageTable]);
@@ -114,9 +121,6 @@ export class MemoryService {
     if (this.activeProcess()?.pid === p.pid) {
       this.activeProcess.set({ ...p });
     }
-    console.log(p);
-
-
     return pte;
   }
 
@@ -226,6 +230,7 @@ export class MemoryService {
     const process = this.processes.find((p) => p.pid === pid);
     if (process) {
       this.activeProcess.set(process);
+
       this.activePageTable.set([...process.pageTable]);
     } else {
       this.activeProcess.set(null);
