@@ -61,14 +61,14 @@
           </thead>
 
           <tbody>
-            <tr [class.row-invalid]="!(pte()?.valid)">
+            <tr>
               <td data-label="Página">{{ vpn() }}</td>
               <td data-label="Válida">
-                <span [class]="pte()?.valid ? 'status status-valid' : 'status status-invalid'">
-                  {{ pte()?.valid ? 'Sim' : 'Não' }}
+                <span class="status status-valid">
+                  'Sim'
                 </span>
               </td>
-              <td data-label="Quadro">{{f !== undefined ? (f) : '-'}}</td>
+              <td data-label="Quadro">{{f() !== undefined ? (f()) : '-'}}</td>
             </tr>
           </tbody>
         </table>
@@ -94,7 +94,7 @@
 
     <section class="step">
       <h2>Passo 3: Formação do Endereço Físico</h2>
-      <p>O número do frame (f) é combinado com o offset ({{offset()}}) original para formar o endereço físico final.</p>
+      <p>O número do frame ({{f()}}) é combinado com o offset ({{offset()}}) original para formar o endereço físico final.</p>
       <div class="address-visual">
         <div class="address-part frame-number">{{f()}}</div>
         <div class="address-part offset">{{offset()}}</div>

@@ -11,10 +11,9 @@ import { PageTableEntry } from '../../models/page-table-entry.interface';
 export class StepByStepGuideComponent {
 
   addr = computed(() => this.memory.address()?.virtual ?? 'addr');
-  vpn = computed(() => this.memory.address()?.pte?.pageNumber ?? 'vpn');
-  offset = computed(() => this.memory.address()?.pte?.offset ?? 'd');
-  f = computed(() => this.memory.address()?.pte?.frameNumber ?? 'frame');
-  pte = computed<PageTableEntry | null>(() => this.memory.address()?.pte ?? null);
+  vpn = computed(() => this.memory.address()?.vpn ?? 'vpn');
+  offset = computed(() => this.memory.address()?.offset ?? 'd');
+  f = computed(() => this.memory.address()?.vfn ?? 'frame');
 
   x = computed(() => this.memory.address()?.spaceAddr ?? 0);
   w = computed(() => this.memory.address()?.pageSizeBytes ?? 0);
@@ -23,5 +22,7 @@ export class StepByStepGuideComponent {
   );
 
   constructor(public memory: MemoryService) {}
+
+
 
 }

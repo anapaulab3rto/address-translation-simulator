@@ -198,7 +198,7 @@ export class MemoryService {
       frame!.referenciedAt = this.time;
       this.updatePTE(p, pageNumber, pte);
       const physical = pte.frameNumber + offset;
-      this.setAddress(addr, physical, pte, p);
+      this.setAddress(addr, physical, pageNumber, offset, pte.frameNumber, p);
       this.setProcessActive(p.pid);
       return p;
     }
@@ -217,7 +217,7 @@ export class MemoryService {
     this.updatePTE(p, pageNumber, loadedPTE);
 
     const physical = loadedPTE.frameNumber + offset;
-    this.setAddress(addr, physical, loadedPTE, p);
+    this.setAddress(addr, physical, pageNumber, offset, frameNumber, p);
     this.setProcessActive(p.pid);
     return p;
   }
@@ -233,11 +233,13 @@ export class MemoryService {
     }
   }
 
-  setAddress(v: string, ph: string, pte: PageTableEntry, p: Process) {
+  setAddress(v: string, ph: string, vpn: string, offset: string, vfn: string, p: Process) {
     this.address.set({
       virtual: v,
       physical: ph,
-      pte,
+      vpn: vpn,
+      offset: offset,
+      vfn: vfn,
       process: p,
       pageSizeBytes: this.pageSizeBytes,
       spaceAddr: this.addressSpace,
