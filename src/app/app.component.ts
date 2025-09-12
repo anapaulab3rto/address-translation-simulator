@@ -19,7 +19,7 @@ export class AppComponent {
   config: ConfigMemory = {
     addressSpace: 64,
     pageSizeBytes: 16,
-    framesCount: 7,
+    framesCount: 4,
     replacementPolicy: 'FIFO'
   }
 

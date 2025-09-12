@@ -78,6 +78,7 @@ export class PageTable {
   selectProcess() {
     const pidNumber = Number(this.pid);
     this.memory.setProcessActive(pidNumber);
+    this.entries = this.memory.getActivePageTable() ?? [];
     this.activePid = this.pid;
   }
 }

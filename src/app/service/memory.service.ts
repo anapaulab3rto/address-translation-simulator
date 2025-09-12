@@ -1,3 +1,4 @@
+import { PageTable } from './../feature/page-table/page-table.component';
 import { Injectable, signal } from '@angular/core';
 import { PageFrame } from '../models/page-frame.interface';
 import { Process } from '../models/process.interface';
@@ -18,8 +19,10 @@ export class MemoryService {
   repl = new PageReplacement();
   addressSpace = 64;
   pageSizeBytes = 16;
-  framesCount = 7;
-  replacementPolicy!: 'FIFO' | 'LRU';
+  framesCount = 4;
+  replacementPolicy = 'FIFO';
+
+
 
   private pageFrames: PageFrame[] = MOCK_FRAMES;
   private processes: Process[] = MOCK_PROCESSES;
@@ -35,25 +38,30 @@ export class MemoryService {
     this.addressSpace = config.addressSpace;
     this.pageSizeBytes = config.pageSizeBytes;
     this.replacementPolicy = config.replacementPolicy;
-    this.framesCount = config.framesCount;
 
-    this.pageFrames = Array.from({ length: this.framesCount }, (_, i): PageFrame => {
-      const bits = this.bitsNecessarios(this.framesCount);
-      const frameNumber = i.toString(2).padStart(bits, '0');
-      return { frameNumber, occupied: false };
+
+    if (config.framesCount !== this.framesCount) {
+      this.framesCount = config.framesCount;
+      this.pageFrames = Array.from({ length: this.framesCount }, (_, i): PageFrame => {
+        const bits = this.bitsNecessarios(this.framesCount);
+        const frameNumber = i.toString(2).padStart(bits, '0');
+        return { frameNumber, occupied: false };
+      }
+      );
+      this.activeProcess.set(null);
+      for (let p of this.processes) p.pageTable = [];
     }
-    );
 
-    for (let p of this.processes) p.pageTable = [];
+
 
     this.activePageFrames.set([...this.pageFrames]);
     this.activePageTable.set([]);
-    this.activeProcess.set(null);
+
   }
   reset() {
     this.addressSpace = 64;
     this.pageSizeBytes = 16;
-    this.framesCount = 7;
+    this.framesCount = 4;
     this.replacementPolicy = 'FIFO';
 
     this.pageFrames = MOCK_FRAMES;
@@ -145,11 +153,10 @@ export class MemoryService {
   }
 
   loadPageForProcess(pid: number, pageNumber: string, pte: PageTableEntry) {
+    console.log(this.replacementPolicy);
+    let p = this.findProcessByPID(pid);
+
     const free = this.pageFrames.find(f => !f.pid);
-    console.log(free);
-    console.log(this.pageFrames);
-
-
     if (free) {
       free.pageNumber = pageNumber;
       free.pid = pid;
@@ -157,26 +164,26 @@ export class MemoryService {
       return free.frameNumber;
     }
 
-    const victimPTE = this.repl.chooseVictimFrame(this.replacementPolicy, this.getValidPageTables());
+    const victimFrameNumber = this.repl.chooseVictimFrame(this.replacementPolicy, this.pageFrames);
 
-    if (!victimPTE) {
-      const fallback = { ...this.pageFrames[0], pageNumber, pid, occupied: true };
-      this.pageFrames = [fallback, ...this.pageFrames.slice(1)];
-      this.activePageFrames.set([...this.pageFrames]);
-      return fallback.frameNumber;
-    }
 
-    const victimFrame = this.pageFrames.find(f => f.frameNumber === victimPTE.frameNumber);
-    victimFrame!.pageNumber = pageNumber;
-    victimFrame!.pid = pid;
-    this.activePageFrames.set([...this.pageFrames]);
+    let pageFrame = this.pageFrames.find(f => f.frameNumber === victimFrameNumber!.frameNumber);
+    pageFrame!.pageNumber = pageNumber;
+    pageFrame!.pid = pid;
+    pageFrame!.loadedAt = this.time;
+    pageFrame!.referencedAt = this.time;
 
-    victimPTE.valid = false;
-    victimPTE.frameNumber = undefined;
+    let victimPTE = this.getValidPageTables()!.find(f => f.frameNumber === pageFrame!.frameNumber);
+     console.log(this.getValidPageTables(), victimFrameNumber!.frameNumber);
+
+    victimPTE!.valid = false;
+    victimPTE!.frameNumber = undefined;
 
     this.activePageTable.set([...this.getActiveProcess()?.pageTable ?? []]);
+    this.activePageFrames.set([...this.pageFrames]);
 
-    return victimFrame!.frameNumber;
+
+    return victimFrameNumber!.frameNumber;
 
   }
 

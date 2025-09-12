@@ -77,8 +77,9 @@ export const MOCK_PROCESSES: Process[] = [
     pid: 1,
     name: 'P1',
     pageTable: [
-      { pid: 1, pageNumber: "00", valid: false, offset: "10100" },
+      { pid: 1, pageNumber: "00", valid: true, offset: "10100", frameNumber: "10" },
       { pid: 1, pageNumber: "10", valid: false, offset: "45" },
+      { pid: 1, pageNumber: "01", valid: true, offset: "8", frameNumber: "11" }
     ],
   },
   {
@@ -86,13 +87,13 @@ export const MOCK_PROCESSES: Process[] = [
     name: 'P2',
     pageTable: [
       { pid: 2, pageNumber: "01", valid: false, offset: "7" },
-      { pid: 2, pageNumber: "11", frameNumber: "00", valid: true, loadedAt: 1, offset: "28" },
+      { pid: 2, pageNumber: "11", frameNumber: "00", valid: true, loadedAt: 7, offset: "28",referencedAt: 1, },
     ],
   },
   {
     pid: 3,
     name: 'P3',
-    pageTable: [{ pid: 3, pageNumber: 3, frameNumber: "01", valid: true, loadedAt: 8, offset: "63" }],
+    pageTable: [{ pid: 3, pageNumber: "11", frameNumber: "01", valid: true, loadedAt: 5, offset: "63",referencedAt: 3, }],
   },
 ];
 
@@ -103,6 +104,7 @@ export const MOCK_FRAMES: PageFrame[] = [
     pageNumber: "11",
     loadedAt: 7,
     referencedAt: 1,
+    occupied: true,
 
   },
   {
@@ -111,15 +113,22 @@ export const MOCK_FRAMES: PageFrame[] = [
     pageNumber: "11",
     loadedAt: 5,
     referencedAt: 3,
+    occupied: true,
   },
   {
     frameNumber: "10",
-    pid: undefined,
-    pageNumber: undefined,
+    pid: 1,
+    pageNumber: "00",
+    loadedAt: 1,
+    referencedAt: 4,
+    occupied: true,
   },
   {
     frameNumber: "11",
-    pid: undefined,
-    pageNumber: undefined,
+    pid: 1,
+    pageNumber: "01",
+    loadedAt: 2,
+    referencedAt: 8,
+    occupied: true,
   },
 ];
